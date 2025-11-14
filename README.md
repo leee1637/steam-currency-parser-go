@@ -1,214 +1,293 @@
-```markdown
-# 🎮 Steam Currency Parser Bot
+# 🎮 Steam Currency Parser Bot / Бот для анализа валют Steam
 
-**English** | [Русский](#-steam-currency-parser-bot-ru)
+<div align="center">
 
-A Go-based Telegram bot that fetches and displays relative currency exchange rates used by Steam, calculated from the price of a single in-game item across different currencies.
+<img width="343" height="152" alt="image" src="https://github.com/user-attachments/assets/957a8229-72fc-4f8a-a93a-c3612820c763" />
 
-## ✨ Features
+**🤖 Smart Telegram Bot | 🔄 Real-time Steam Rates | 🎯 Go Language**
 
-- 💬 Command `/currency` — get current rates.
-- 🕐 Automatic updates at **1:00 Moscow time**.
-- 🧩 Support for **customizable currencies**.
-- 📁 Easy setup with `.env` file.
+*A powerful Telegram bot written in Go that parses Steam's internal currency exchange rates based on in-game item prices across different regions*
 
-## 📥 Installation
+🇺🇸 [English](#-features) | 🇷🇺 [Русский](#-возможности)
 
-1. **Install Go** (version 1.25.1 or higher) from [https://go.dev/dl/](https://go.dev/dl).
-2. Clone the repository:
+</div>
 
-   ```bash
-   git clone https://github.com/leee1637/steam-currency-parser-go.git
-   cd steam-currency-parser-go
-   ```
+## 🎯 About This Bot
 
-3. Install dependencies:
+This **Go-based Telegram bot** provides real-time monitoring of Steam's internal currency exchange rates. Unlike traditional financial APIs, it calculates rates directly from Steam Marketplace data by comparing prices of the same in-game item across different currency regions.
 
-   ```bash
-   go mod tidy
-   ```
+### 🔍 How It Works:
+- **🎮 In-Game Item Based**: Uses actual Steam market prices of CS:GO/CS2 items
+- **💱 Real Exchange Rates**: Calculates actual rates Steam uses for conversions  
+- **🔄 Automated Updates**: Fresh data daily at 1:00 Moscow time
+- **⚡ Go Performance**: Built with Go for high performance and reliability
 
-## ⚙️ Setup
+### 💡 Perfect For:
+- Steam traders and market analysts
+- Gamers purchasing items from different regions
+- Developers needing Steam currency data
+- Financial researchers studying virtual economies
 
-### 1. Get Telegram Bot Token
 
-1. Open Telegram and search for `@BotFather`.
-2. Start a chat and send `/newbot`.
-3. Follow the instructions to create a bot and get the **token**.
-4. Save the token for later.
+## ✨ Features {#-features}
 
-### 2. Configure `.env` file
+<div align="center">
 
-Create a file named `.env` in the root of the project:
+| Feature | Description |
+|---------|-------------|
+| 💬 **Command** | `/currency` - Get current exchange rates |
+| 🕐 **Auto Updates** | Daily at **1:00 Moscow time** |
+| 🧩 **Customizable** | Support for multiple currencies |
+| 📁 **Easy Setup** | Simple `.env` configuration |
 
+</div>
+
+## 🚀 Quick Start
+
+### 1. Prerequisites
+- **Go 1.25.1+** - [Download here](https://go.dev/dl/)
+
+### 2. Installation
+```bash
+git clone https://github.com/leee1637/steam-currency-parser-go.git
+cd steam-currency-parser-go
+go mod tidy
+```
+
+### 3. Bot Setup
+
+#### Get Telegram Bot Token
+1. Open Telegram, search for `@BotFather`
+2. Send `/newbot` and follow instructions
+3. Copy your bot token
+
+#### Configure Environment
+Create `.env` file:
 ```env
 TELEGRAM_TOKEN=your_bot_token_here
 APP_ID=730
 MARKET_HASH_NAME=AK-47%20|%20Redline%20(Factory%20New)
 ```
 
-- `TELEGRAM_TOKEN`: Your bot token from BotFather.
-- `APP_ID`: Steam game ID. `730` is CS:GO.
-- `MARKET_HASH_NAME`: Name of the item on Steam Market (URL-encoded).
+#### Find Market Hash Name
+1. Go to [Steam Market](https://steamcommunity.com/market/)
+2. Find your item (e.g., `AK-47 | Redline (Factory New)`)
+3. Copy URL segment after `listings/730/`
 
-### 3. How to Find `MARKET_HASH_NAME`
+**Example URL:**
+```
+https://steamcommunity.com/market/listings/730/AK-47%20|%20Redline%20(Factory%20New)
+```
+**MARKET_HASH_NAME:** `AK-47%20|%20Redline%20(Factory%20New)`
 
-1. Go to [Steam Market](https://steamcommunity.com/market/).
-2. Find an item (e.g. `AK-47 | Redline (Factory New)`).
-3. Click on it.
-4. Copy the URL. Example:
-   ```
-   https://steamcommunity.com/market/listings/730/AK-47%20|%20Redline%20(Factory%20New)
-   ```
-5. The part after `listings/730/` is your `MARKET_HASH_NAME`: `AK-47%20|%20Redline%20(Factory%20New)`.
+## 💰 Supported Currencies
 
-### 4. Supported Currencies
-
-The bot fetches rates based on a **fixed list of currencies** in `cmd/main.go`. You can **add or remove** them easily:
+<div align="center">
 
 | Currency | Code | Symbol |
 |----------|------|--------|
-| USD      | 1    | $      |
-| EUR      | 3    | €      |
-| RUB      | 5    | ₽      |
-| JPY      | 8    | ¥      |
-| CNY      | 23   | ¥      |
-| AED      | 32   | د.إ    |
+| USD | 1 | $ |
+| EUR | 3 | € |
+| RUB | 5 | ₽ |
+| JPY | 8 | ¥ |
+| CNY | 23 | ¥ |
+| AED | 32 | د.إ |
 
-**Currency codes** are based on [Steam's internal codes](https://partner.steamgames.com/doc/store/pricing/currencies).
+</div>
 
-## 🔧 How It Works
+*Currency codes based on [Steam's documentation](https://partner.steamgames.com/doc/store/pricing/currencies)*
 
-1. The bot fetches the price of a single item (e.g. `AK-47 | Redline`) in USD.
-2. It then fetches the same item's price in other currencies.
-3. It calculates the relative rate: `price_in_currency / price_in_USD`.
-4. The result is sent to Telegram as: `1 USD = X currency`.
-5. Automatically updates at 1:00 Moscow time.
+## 🛠 How It Works
 
-## ▶️ Run
+<div align="center">
+
+
+</div>
+
+1. **Fetch USD Price** - Gets item price in US Dollars
+2. **Get Other Currencies** - Retrieves same item's price in other currencies
+3. **Calculate Rates** - Computes `price_in_currency / price_in_USD`
+4. **Display Results** - Sends formatted rates to Telegram
+5. **Auto Update** - Daily refresh at 1:00 Moscow time
+
+## 🎯 Recommended Items
+
+For stable currency rates, use these items:
+
+- ✅ `CS:GO Case Key`
+- ✅ `Glock-18 | Fade (Factory New)` 
+- ✅ `Souvenir AK-47`
+
+**Avoid:** Volatile items like cases or high-demand skins
+
+## 📸 Screenshots
+
+<div align="center">
+
+### Bot Interface
+<img width="344" height="191" alt="image" src="https://github.com/user-attachments/assets/1a112099-53d0-441c-a7c3-d0f084571ab6" />
+
+### Rate Display
+<img width="681" height="169" alt="image" src="https://github.com/user-attachments/assets/d0f72bc6-3706-41b0-8d6a-50fd72e17bb5" />
+
+</div>
+
+## ▶️ Run the Bot
 
 ```bash
 go run cmd/main.go
 ```
 
-## 📷 Screenshots
-
-(Add your screenshots here)
-
-## 📌 Recommended Items for Stable Rates
-
-For more stable currency rates, use items that change price less frequently:
-
-- `CS:GO Case Key`
-- `Glock-18 | Fade (Factory New)`
-- `Souvenir AK-47`
-
-Avoid volatile items like cases or skins with high demand.
-
 ---
 
-# 🎮 Steam Currency Parser Bot (RU)
+# 🎮 Steam Currency Parser Bot (RU) {#-steam-currency-parser-bot-ru}
 
-Telegram-бот, который показывает относительные курсы валют, используемые Steam, на основе цен на один и тот же предмет.
+<div align="center">
 
-## ✨ Возможности
+<img width="343" height="152" alt="image" src="https://github.com/user-attachments/assets/b5c5811a-0b4d-42c7-9cfb-d1c82f25bb66" />
 
-- 💬 Команда `/currency` — получить текущие курсы.
-- 🕐 Автоматическое обновление в **1:00 по Московскому времени**.
-- 🧩 Поддержка **настраиваемых валют**.
-- 📁 Простая настройка через `.env`.
+🤖 Умный Telegram-бот | 🔄 Курсы Steam в реальном времени | 🎯 Язык Go
 
-## 📥 Установка
+Мощный Telegram-бот на языке Go, который парсит внутренние курсы валют Steam на основе цен внутриигровых предметов в разных регионах
 
-1. **Установите Go** (версия 1.25.1 или выше) с [https://go.dev/dl/](https://go.dev/dl/).
-2. Клонируйте репозиторий:
+[English](#-features) | [Русский](#-возможности)
 
-   ```bash
-   git clone https://github.com/leee1637/steam-currency-parser-go.git
-   cd steam-currency-parser-go
-   ```
+</div>
 
-3. Установите зависимости:
+🎯 О боте
+Этот Telegram-бот на языке Go предоставляет мониторинг внутренних курсов валют Steam в реальном времени. В отличие от традиционных финансовых API, он рассчитывает курсы напрямую из данных Steam Marketplace, сравнивая цены на один и тот же внутриигровой предмет в разных валютных регионах.
 
-   ```bash
-   go mod tidy
-   ```
+🔍 Как это работает:
+🎮 На основе игровых предметов: Использует реальные цены предметов CS:GO/CS2 из маркета Steam
 
-## ⚙️ Настройка
+💱 Реальные курсы обмена: Рассчитывает фактические курсы, которые использует Steam для конвертаций
 
-### 1. Получите токен Telegram-бота
+🔄 Автоматическое обновление: Свежие данные ежедневно в 1:00 по Москве
 
-1. Откройте Telegram и найдите `@BotFather`.
-2. Начните чат и отправьте `/newbot`.
-3. Следуйте инструкциям, чтобы создать бота и получить **токен**.
-4. Сохраните токен.
+⚡ Производительность Go: Написан на Go для высокой производительности и надежности
 
-### 2. Настройте файл `.env`
+💡 Идеально подходит для:
+Трейдеров Steam и аналитиков рынка
 
-Создайте файл `.env` в корне проекта:
+Геймеров, покупающих предметы из разных регионов
 
+Разработчиков, нуждающихся в данных о валютах Steam
+
+Исследователей, изучающих виртуальные экономики
+
+## ✨ Возможности {#-возможности}
+
+<div align="center">
+
+| Функция | Описание |
+|---------|----------|
+| 💬 **Команды** | `/currency` - Получить текущие курсы |
+| 🕐 **Автообновление** | Ежедневно в **1:00 по Москве** |
+| 🧩 **Настройка** | Поддержка множества валют |
+| 📁 **Простая установка** | Простая настройка через `.env` |
+
+</div>
+
+## 🚀 Быстрый старт
+
+### 1. Требования
+- **Go 1.25.1+** - [Скачать здесь](https://go.dev/dl/)
+
+### 2. Установка
+```bash
+git clone https://github.com/leee1637/steam-currency-parser-go.git
+cd steam-currency-parser-go
+go mod tidy
+```
+
+### 3. Настройка бота
+
+#### Получение токена бота
+1. Откройте Telegram, найдите `@BotFather`
+2. Отправьте `/newbot` и следуйте инструкциям
+3. Скопируйте токен бота
+
+#### Настройка окружения
+Создайте файл `.env`:
 ```env
 TELEGRAM_TOKEN=ваш_токен_бота
 APP_ID=730
 MARKET_HASH_NAME=AK-47%20|%20Redline%20(Factory%20New)
 ```
 
-- `TELEGRAM_TOKEN`: Токен вашего бота из BotFather.
-- `APP_ID`: ID игры в Steam. `730` — это CS:GO.
-- `MARKET_HASH_NAME`: Название предмета на рынке Steam (в URL-кодировке).
+#### Поиск Market Hash Name
+1. Перейдите на [Steam Market](https://steamcommunity.com/market/)
+2. Найдите предмет (например, `AK-47 | Redline (Factory New)`)
+3. Скопируйте часть URL после `listings/730/`
 
-### 3. Как найти `MARKET_HASH_NAME`
+**Пример URL:**
+```
+https://steamcommunity.com/market/listings/730/AK-47%20|%20Redline%20(Factory%20New)
+```
+**MARKET_HASH_NAME:** `AK-47%20|%20Redline%20(Factory%20New)`
 
-1. Перейдите на [Steam Market](https://steamcommunity.com/market/).
-2. Найдите предмет (например, `AK-47 | Redline (Factory New)`).
-3. Нажмите на него.
-4. Скопируйте URL. Пример:
-   ```
-   https://steamcommunity.com/market/listings/730/AK-47%20|%20Redline%20(Factory%20New)
-   ```
-5. Часть после `listings/730/` — это `MARKET_HASH_NAME`: `AK-47%20|%20Redline%20(Factory%20New)`.
+## 💰 Поддерживаемые валюты
 
-### 4. Поддерживаемые валюты
-
-Бот получает курсы на основе **фиксированного списка валют** в `cmd/main.go`. Вы можете **добавить или удалить** их:
+<div align="center">
 
 | Валюта | Код | Символ |
 |--------|-----|--------|
-| USD    | 1   | $      |
-| EUR    | 3   | €      |
-| RUB    | 5   | ₽      |
-| JPY    | 8   | ¥      |
-| CNY    | 23  | ¥      |
-| AED    | 32  | د.إ    |
+| USD | 1 | $ |
+| EUR | 3 | € |
+| RUB | 5 | ₽ |
+| JPY | 8 | ¥ |
+| CNY | 23 | ¥ |
+| AED | 32 | د.إ |
 
-**Коды валют** основаны на [внутренних кодах Steam](https://partner.steamgames.com/doc/store/pricing/currencies).
+</div>
 
-## 🔧 Как это работает
+*Коды валют на основе [документации Steam](https://partner.steamgames.com/doc/store/pricing/currencies)*
 
-1. Бот получает цену на один предмет (например, `AK-47 | Redline`) в USD.
-2. Затем он получает цену на тот же предмет в других валютах.
-3. Вычисляет относительный курс: `цена_в_валюте / цена_в_USD`.
-4. Результат отправляется в Telegram как: `1 USD = X валюта`.
-5. Автоматическое обновление в 1:00 по Московскому времени.
+## 🛠 Как это работает
 
-## ▶️ Запуск
+<div align="center">
+
+
+</div>
+
+1. **Получение цены в USD** - Получает цену предмета в долларах
+2. **Получение других валют** - Находит цену того же предмета в других валютах
+3. **Расчет курсов** - Вычисляет `цена_в_валюте / цена_в_USD`
+4. **Отображение результатов** - Отправляет форматированные курсы в Telegram
+5. **Автообновление** - Ежедневное обновление в 1:00 по Москве
+
+## 🎯 Рекомендуемые предметы
+
+Для стабильных курсов используйте:
+
+- ✅ `CS:GO Case Key`
+- ✅ `Glock-18 | Fade (Factory New)`
+- ✅ `Souvenir AK-47`
+
+**Избегайте:** Волатильные предметы like кейсы или скины с высоким спросом
+
+## 📸 Скриншоты
+
+<div align="center">
+
+### Интерфейс бота
+<img width="344" height="191" alt="image" src="https://github.com/user-attachments/assets/6c09e4a8-2cba-4fa3-adbb-de8dfb83bbfc" />
+
+### Отображение курсов
+<img width="681" height="169" alt="image" src="https://github.com/user-attachments/assets/32e24529-f6c1-4767-8b30-d9f4d77b46b2" />
+
+</div>
+
+## ▶️ Запуск бота
 
 ```bash
 go run cmd/main.go
 ```
 
-## 📷 Скриншоты
+---
 
-(Добавьте сюда свои скриншоты)
+<div align="center">
 
-## 📌 Рекомендуемые предметы для стабильных курсов
+**⭐ Если вам понравился проект, не забудьте поставить звезду!**
 
-
-Для более стабильных курсов используйте предметы, цена на которые меняется реже:
-
-- `CS:GO Case Key`
-- `Glock-18 | Fade (Factory New)`
-- `Souvenir AK-47`
-
-Избегайте волатильных предметов, таких как кейсы или скины с высоким спросом.
-```
+</div>
